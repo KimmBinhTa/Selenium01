@@ -43,6 +43,10 @@ public class Topic_04_WebBrowser {
 		createBtn.click();
 		String registerUrl = driver.getCurrentUrl();
 	}
+	
+	public void TC_02() {
+		
+	}
 
 	@AfterClass
 	public void afterClass() {
