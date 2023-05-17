@@ -1,5 +1,6 @@
 package selenium;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -191,16 +192,7 @@ public class Topic_04_WebBrowser {
 		
 	}
 	
-	//random email
-//	public static String generateRandomEmail(int length) {
-//	    log.info("Generating a Random email String");
-//	    String allowedChars = "abcdefghijklmnopqrstuvwxyz" + "1234567890" + "_-.";
-//	    String email = "";
-//	    String temp = RandomStringUtils.random(length, allowedChars);
-//	    email = temp.substring(0, temp.length() - 9) + "@testdata.com";
-//	    return email;
-//	}
-	//@Test 
+	@Test 
 	public void TC_05_Create_a_new_account() {
 		//Step 02 - Click vào link "My Account" để tới trang đăng nhập
 		WebElement myAccount = driver.findElement(By.xpath("//div[@class='footer']//a[@title='My Account']"));
@@ -226,7 +218,8 @@ public class Topic_04_WebBrowser {
 		WebElement emailAddress = driver.findElement(By.xpath("//input[@id='email_address']"));
 		emailAddress.click();
 		//emailAddress.generateRandomEmail()+"@gmail.com";
-		emailAddress.sendKeys("alex123@gmail.com");
+		String randEmailAddress = "testdata" + generateRandomNumber() + "@gmail.com";
+		emailAddress.sendKeys(randEmailAddress);
 		
 		WebElement password = driver.findElement(By.xpath("//input[@id='password']"));
 		password.click();
@@ -243,29 +236,36 @@ public class Topic_04_WebBrowser {
 		//Step 06 - Verify message xuất hiện khi đăng kí thành công: Thank you for registering with Main Website Store
 	
 		WebElement registerSuccessMess = driver.findElement(By.xpath("//div[@class='dashboard']//span[text()='Thank you for registering with Main Website Store.']"));
-	
+
 		//Step 07 - Verify User được tạo mới với thông tin: Firstname/ Lastname/ Email hiển thị ở trang My Dashboard
-//		WebElement infoUser = driver.findElement();
-//		Assert.assertEquals(" ",infoUser.getText());
-//		WebElement emailUser = driver.findElement();
-//		Assert.assertEquals(" ",emailUser.getText());
-//		
-//		String myDashboard = driver.getCurrentUrl();
-//		Assert.assertEquals("http://live.techpanda.org/index.php/customer/account/index/",myDashboard);
+		WebElement account = driver.findElement(By.xpath("//div[@class='account-cart-wrapper']//span[text()='Account']"));
+		account.click();
+		WebElement myAccountDropdown = driver.findElement(By.xpath("//a[@title='My Account']"));
+		myAccountDropdown.click();
+		
+		
+		WebElement infoUser = driver.findElement(By.xpath("//div[@class='col-1']//div[@class='box-content']/p"));
+	
+		
+		Assert.assertTrue(infoUser.getText().contains("Alex"));
+		Assert.assertTrue(infoUser.getText().contains("Amendola"));
+		Assert.assertTrue(infoUser.getText().contains(randEmailAddress));
+		
+
 		
 		//Step 08 - Logout khỏi hệ thống
-		WebElement account = driver.findElement(By.xpath("//div[@class='account-cart-wrapper']//span[text()='Account']"));
+		 account = driver.findElement(By.xpath("//div[@class='account-cart-wrapper']//span[text()='Account']"));
 		account.click();
 		WebElement logout = driver.findElement(By.xpath("//a[@title='Log Out']"));
 		logout.click();
 		
 		//Step 09 - Kiểm tra hệ thống navigate về Home page sau khi logout thành công
 		String homePage = driver.getCurrentUrl();
-		Assert.assertEquals("http://live.techpanda.org/index.php/",homePage);
+		Assert.assertEquals("http://live.techpanda.org/index.php/customer/account/logoutSuccess/",homePage);
 		
 	
 	}
-	@Test 
+//	@Test 
 	public void TC_06_Login_with_valid_Email_and_Password() {
 		//Step 02 - Click vào link "My Account" để tới trang đăng nhập
 		WebElement myAccount = driver.findElement(By.xpath("//div[@class='footer']//a[@title='My Account']"));
@@ -291,5 +291,11 @@ public class Topic_04_WebBrowser {
 	public void afterClass() {
 		// Đóng browser
 		driver.quit();
+	}
+	
+//	random number
+	public static int generateRandomNumber() {
+		Random rand = new Random();
+		return rand.nextInt(9999);
 	}
 }
